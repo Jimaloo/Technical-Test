@@ -7,9 +7,9 @@ import java.time.OffsetDateTime
 class ActiveUsagePeriodRemoteDataSource {
 
     suspend fun getLockingInfo(): ActiveUsagePeriod {
-        delay(5000) // Simulating network calls
+        delay(500) // Simulating network calls
         return ActiveUsagePeriod(
-            OffsetDateTime.now().withHour(10).withMinute(16).withSecond(0)
+            OffsetDateTime.now().withHour(23).withMinute(0).withSecond(0)
         )
     }
 }

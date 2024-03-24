@@ -3,6 +3,7 @@ package com.jim.devicecountdowntimer.di
 import com.jim.countdowntimer.data.ActiveUsagePeriodRemoteDataSource
 import com.jim.countdowntimer.data.CountryIsoDataSource
 import com.jim.devicecountdowntimer.data.ActiveUsagePeriodLocalDataSource
+import com.jim.devicecountdowntimer.data.DeviceTimeDataSource
 import com.jim.devicecountdowntimer.domain.CountdownTimerRepository
 import dagger.Module
 import dagger.Provides
@@ -22,13 +23,15 @@ class TimerHiltModules {
         activeUsagePeriodRemoteDataSource: ActiveUsagePeriodRemoteDataSource,
         activeUsagePeriodLocalDataSource: ActiveUsagePeriodLocalDataSource,
         countryIsoCodeDataSource: CountryIsoDataSource,
+        deviceTimeDataSource: DeviceTimeDataSource,
         dispatchers: CoroutineDispatcher
     ): CountdownTimerRepository {
         return CountdownTimerRepository(
             activeUsagePeriodRemoteDataSource = activeUsagePeriodRemoteDataSource,
             activeUsagePeriodLocalDataSource = activeUsagePeriodLocalDataSource,
             countryIsoDateSource = countryIsoCodeDataSource,
-            dispatchers = dispatchers
+            dispatchers = dispatchers,
+            countryDeviceTimeDataSource = deviceTimeDataSource
         )
     }
 
@@ -45,6 +48,10 @@ class TimerHiltModules {
     @Provides
     fun provideCountryIsoCodeDataSource(): CountryIsoDataSource {
         return CountryIsoDataSource()
+    }
+    @Provides
+    fun provideDeviceTimeDataSource(): DeviceTimeDataSource {
+        return DeviceTimeDataSource()
     }
 
 

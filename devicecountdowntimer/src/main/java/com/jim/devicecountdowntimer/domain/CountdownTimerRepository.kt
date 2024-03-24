@@ -1,11 +1,10 @@
 package com.jim.devicecountdowntimer.domain
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import com.jim.countdowntimer.data.ActiveUsagePeriodRemoteDataSource
 import com.jim.countdowntimer.data.CountryIsoDataSource
 import com.jim.countdowntimer.data.model.CountryIsoCode
 import com.jim.devicecountdowntimer.data.ActiveUsagePeriodLocalDataSource
+import com.jim.devicecountdowntimer.data.DeviceTimeDataSource
 import com.jim.devicecountdowntimer.presentation.TimerScreenState
 import com.jim.devicecountdowntimer.presentation.TimerStatus
 import kotlinx.coroutines.CoroutineDispatcher
@@ -19,6 +18,7 @@ import kotlin.text.*
 class CountdownTimerRepository(
     val countryIsoDateSource: CountryIsoDataSource,
     val dispatchers: CoroutineDispatcher,
+    val countryDeviceTimeDataSource: DeviceTimeDataSource,
     val activeUsagePeriodRemoteDataSource: ActiveUsagePeriodRemoteDataSource,
     val activeUsagePeriodLocalDataSource: ActiveUsagePeriodLocalDataSource
 ) {
@@ -28,7 +28,7 @@ class CountdownTimerRepository(
             val deviceLockingTime = getTimeUntilDeviceLock().truncatedTo(ChronoUnit.SECONDS)
             val countryISO = getCountryIso()
             val warningTimeForCountry = getWarningTimeForCountry(deviceLockingTime, countryISO)
-            val currentDeviceTime = OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS)
+            val currentDeviceTime = getDeviceTime().truncatedTo(ChronoUnit.SECONDS)
             val timerStatus = getTimerStatusForCountry(
                 deviceLockingTime,
                 currentDeviceTime,
@@ -41,7 +41,7 @@ class CountdownTimerRepository(
             emit(
                 TimerScreenState(
                     timeRemaining = timeRemaining,
-                   timerStatus = timerStatus
+                    timerStatus = timerStatus
                 )
             )
         }
@@ -51,8 +51,11 @@ class CountdownTimerRepository(
         return countryIsoDateSource.getCountryIsoCode()
     }
 
+    private fun getDeviceTime(): OffsetDateTime {
+        return countryDeviceTimeDataSource.getCurrentDeviceTime()
+    }
 
-    suspend fun getTimeUntilDeviceLock(): OffsetDateTime = withContext(dispatchers) {
+    private suspend fun getTimeUntilDeviceLock(): OffsetDateTime = withContext(dispatchers) {
 
         return@withContext if (activeUsagePeriodLocalDataSource.getLockingInfo() != null) {
             println("local DB call")
@@ -65,19 +68,19 @@ class CountdownTimerRepository(
         }
     }
 
-    fun getTimerStatusForCountry(
+    private fun getTimerStatusForCountry(
         deviceLockingTime: OffsetDateTime,
         currentTime: OffsetDateTime,
         countryWarningTime: OffsetDateTime
     ): TimerStatus {
         return when {
-            currentTime.isBefore(countryWarningTime) -> TimerStatus.HEALTHY
+            currentTime.isBefore(countryWarningTime) -> TimerStatus.ACTIVE
             currentTime.isAfter(deviceLockingTime) -> TimerStatus.LOCKED
             else -> TimerStatus.WARNING
         }
     }
 
-    fun getWarningTimeForCountry(
+    private fun getWarningTimeForCountry(
         currentTime: OffsetDateTime,
         countryISO: CountryIsoCode
     ): OffsetDateTime {
@@ -87,7 +90,7 @@ class CountdownTimerRepository(
         }
     }
 
-    fun getFormattedDeviceTime(
+    private fun getFormattedDeviceTime(
         currentTime: OffsetDateTime,
         deviceLockingTime: OffsetDateTime
     ): String {

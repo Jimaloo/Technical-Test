@@ -77,4 +77,11 @@ dependencies {
     // For local unit tests
     testImplementation(libs.hilt.android.testing)
     kaptTest(libs.hilt.compiler)
+
+    // MockK
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
+
+    // Coroutines test
+    testImplementation(libs.kotlinx.coroutines.test)
 }

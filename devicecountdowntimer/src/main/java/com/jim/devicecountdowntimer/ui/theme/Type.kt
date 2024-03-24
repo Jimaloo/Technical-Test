@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.sp
 import com.jim.devicecountdowntimer.R
 
 val cerapro = FontFamily(
-    Font(R.font.cerapro_free_black, FontWeight.Black),
+    Font(R.font.cerapro_free_bold, FontWeight.Black),
     Font(R.font.cerapro_free_regular, FontWeight.Normal),
 )
 

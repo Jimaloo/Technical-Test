@@ -37,20 +37,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.ui.platform.testTag
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jim.devicecountdowntimer.ui.theme.cerapro
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimerScreen() {
-
-    val viewModel: TimerViewModel = viewModel()
-
-    LaunchedEffect(key1 = true, block = {
-        viewModel.onEventChange(TimerScreenUiEvent.StartTimer)
-    })
-    val status = viewModel.state.value
+fun TimerScreen(state: TimerScreenState) {
 
     Scaffold {
         Column(
@@ -84,7 +78,7 @@ fun TimerScreen() {
                 ) {
 
                     Text(
-                        text = status.timerStatus?.name ?: "", fontFamily = cerapro,
+                        text = state.timerStatus?.name ?: "", fontFamily = cerapro,
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
@@ -94,16 +88,16 @@ fun TimerScreen() {
                     Column(
                         modifier = Modifier
                             .background(
-                                status.timerStatus?.timerBackgroundColor ?: Color.Green,
+                                state.timerStatus?.timerBackgroundColor ?: Color.Green,
                                 CircleShape
                             )
                             .border(
                                 20.dp,
-                                status.timerStatus?.timerBorderColor ?: Color.Gray,
+                                state.timerStatus?.timerBorderColor ?: Color.Green,
                                 shape = RoundedCornerShape(500.dp)
                             )
                             .padding(16.dp)
-                            .size(260.dp),
+                            .size(260.dp).testTag("timer_card"),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -118,7 +112,7 @@ fun TimerScreen() {
                         )
 
                         Text(
-                            text = status.timeRemaining,
+                            text = state.timeRemaining,
                             fontFamily = cerapro,
                             style = MaterialTheme.typography.displaySmall,
                             fontWeight = FontWeight.Bold,
@@ -129,7 +123,7 @@ fun TimerScreen() {
 
                 }
             }
-            status.timerStatus?.message?.let {
+            state.timerStatus?.let {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -148,13 +142,23 @@ fun TimerScreen() {
                             modifier = Modifier.size(30.dp)
                         )
 
-                        Text(
-                            text = it,
-                            modifier = Modifier.padding(10.dp),
-                            fontFamily = cerapro,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Normal
-                        )
+                        Column {
+                            Text(
+                                text = it.statusMessage,
+                                modifier = Modifier.padding(10.dp),
+                                fontFamily = cerapro,
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = it.message,
+                                modifier = Modifier.padding(start = 10.dp),
+                                fontFamily = cerapro,
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Normal
+                            )
+                        }
+
                     }
 
                 }
@@ -163,7 +167,7 @@ fun TimerScreen() {
 
         }
 
-        when (status.requestsStatus) {
+        when (state.requestsStatus) {
             is TimerRequestsStatus.Loading -> {
                 LoadingIndicator()
             }
@@ -179,8 +183,3 @@ fun TimerScreen() {
     }
 }
 
-@Composable
-@Preview
-fun TimerScreenPreview() {
-    TimerScreen()
-}
