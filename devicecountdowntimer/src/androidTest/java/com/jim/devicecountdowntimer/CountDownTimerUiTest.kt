@@ -8,9 +8,9 @@ import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import com.jim.devicecountdowntimer.presentation.TimerScreen
-import com.jim.devicecountdowntimer.presentation.TimerScreenState
-import com.jim.devicecountdowntimer.presentation.TimerStatus
+import com.jim.devicecountdowntimer.presentation.timer.TimerScreen
+import com.jim.devicecountdowntimer.presentation.timer.TimerScreenState
+import com.jim.devicecountdowntimer.presentation.timer.TimerStatus
 import junit.framework.TestCase.assertEquals
 import org.junit.Rule
 import org.junit.Test

@@ -5,13 +5,15 @@ import com.jim.countdowntimer.data.CountryIsoDataSource
 import com.jim.countdowntimer.data.model.CountryIsoCode
 import com.jim.devicecountdowntimer.data.ActiveUsagePeriodLocalDataSource
 import com.jim.devicecountdowntimer.data.DeviceTimeDataSource
-import com.jim.devicecountdowntimer.presentation.TimerScreenState
-import com.jim.devicecountdowntimer.presentation.TimerStatus
+import com.jim.devicecountdowntimer.presentation.timer.TimerScreenState
+import com.jim.devicecountdowntimer.presentation.timer.TimerStatus
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.text.*
 
@@ -20,7 +22,8 @@ class CountdownTimerRepository(
     val dispatchers: CoroutineDispatcher,
     val countryDeviceTimeDataSource: DeviceTimeDataSource,
     val activeUsagePeriodRemoteDataSource: ActiveUsagePeriodRemoteDataSource,
-    val activeUsagePeriodLocalDataSource: ActiveUsagePeriodLocalDataSource
+    val activeUsagePeriodLocalDataSource: ActiveUsagePeriodLocalDataSource,
+    val timerFormatter: DateTimeFormatter
 ) {
 
     fun getTimerState(): Flow<TimerScreenState> = flow {
@@ -102,6 +105,7 @@ class CountdownTimerRepository(
             val minutes = (timeRemaining % 3600) / 60
             val seconds = timeRemaining % 60
             String.format("%02d:%02d:%02d", hours, minutes, seconds)
+
         }
     }
 

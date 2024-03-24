@@ -1,4 +1,4 @@
-package com.jim.devicecountdowntimer.presentation
+package com.jim.devicecountdowntimer.presentation.timer
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

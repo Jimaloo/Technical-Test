@@ -1,4 +1,4 @@
-package com.jim.devicecountdowntimer.presentation
+package com.jim.devicecountdowntimer.presentation.timer
 
 import androidx.compose.ui.graphics.Color
 

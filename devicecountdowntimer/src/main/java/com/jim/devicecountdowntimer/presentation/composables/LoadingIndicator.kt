@@ -1,4 +1,4 @@
-package com.jim.devicecountdowntimer.presentation
+package com.jim.devicecountdowntimer.presentation.composables
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background

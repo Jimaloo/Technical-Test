@@ -1,4 +1,4 @@
-package com.jim.devicecountdowntimer.presentation
+package com.jim.devicecountdowntimer.presentation.timer
 
 sealed class TimerScreenUiEvent {
 

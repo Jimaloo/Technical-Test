@@ -24,14 +24,16 @@ class TimerHiltModules {
         activeUsagePeriodLocalDataSource: ActiveUsagePeriodLocalDataSource,
         countryIsoCodeDataSource: CountryIsoDataSource,
         deviceTimeDataSource: DeviceTimeDataSource,
-        dispatchers: CoroutineDispatcher
+        dispatchers: CoroutineDispatcher,
+        timerFormatter: DateTimeFormatter
     ): CountdownTimerRepository {
         return CountdownTimerRepository(
             activeUsagePeriodRemoteDataSource = activeUsagePeriodRemoteDataSource,
             activeUsagePeriodLocalDataSource = activeUsagePeriodLocalDataSource,
             countryIsoDateSource = countryIsoCodeDataSource,
             dispatchers = dispatchers,
-            countryDeviceTimeDataSource = deviceTimeDataSource
+            countryDeviceTimeDataSource = deviceTimeDataSource,
+            timerFormatter = timerFormatter
         )
     }
 
@@ -53,7 +55,6 @@ class TimerHiltModules {
     fun provideDeviceTimeDataSource(): DeviceTimeDataSource {
         return DeviceTimeDataSource()
     }
-
 
     @Provides
     fun provideCoroutineDispatcher(): CoroutineDispatcher {

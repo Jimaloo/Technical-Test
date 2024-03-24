@@ -6,9 +6,8 @@ import com.jim.countdowntimer.data.model.ActiveUsagePeriod
 import com.jim.countdowntimer.data.model.CountryIsoCode
 import com.jim.devicecountdowntimer.data.ActiveUsagePeriodLocalDataSource
 import com.jim.devicecountdowntimer.data.DeviceTimeDataSource
-import com.jim.devicecountdowntimer.presentation.TimerScreen
-import com.jim.devicecountdowntimer.presentation.TimerScreenState
-import com.jim.devicecountdowntimer.presentation.TimerStatus
+import com.jim.devicecountdowntimer.presentation.timer.TimerScreenState
+import com.jim.devicecountdowntimer.presentation.timer.TimerStatus
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -25,6 +24,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 class CountdownTimerRepositoryTest {
 
@@ -38,6 +38,8 @@ class CountdownTimerRepositoryTest {
     private lateinit var countryIsoDataSource: CountryIsoDataSource
     @MockK
     private lateinit var deviceTimeDataSource: DeviceTimeDataSource
+    @MockK
+    private lateinit var deviceTimeFormatter: DateTimeFormatter
 
     private lateinit var repository: CountdownTimerRepository
 
@@ -51,7 +53,8 @@ class CountdownTimerRepositoryTest {
             testDispatcher,
             deviceTimeDataSource,
             activeUsagePeriodRemoteDataSource,
-            activeUsagePeriodLocalDataSource
+            activeUsagePeriodLocalDataSource,
+            deviceTimeFormatter
         )
     }
 
