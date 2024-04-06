@@ -1,5 +1,6 @@
 package com.jim.devicecountdowntimer.domain
 
+import android.annotation.SuppressLint
 import com.jim.countdowntimer.data.ActiveUsagePeriodRemoteDataSource
 import com.jim.countdowntimer.data.CountryIsoDataSource
 import com.jim.countdowntimer.data.model.CountryIsoCode
@@ -11,11 +12,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import kotlin.text.*
 
 class CountdownTimerRepository(
     val countryIsoDateSource: CountryIsoDataSource,
@@ -28,7 +27,7 @@ class CountdownTimerRepository(
 
     fun getTimerState(): Flow<TimerScreenState> = flow {
         while (true) {
-            val deviceLockingTime = getTimeUntilDeviceLock().truncatedTo(ChronoUnit.SECONDS)
+            val deviceLockingTime = getDeviceLockingTime().truncatedTo(ChronoUnit.SECONDS)
             val countryISO = getCountryIso()
             val warningTimeForCountry = getWarningTimeForCountry(deviceLockingTime, countryISO)
             val currentDeviceTime = getDeviceTime().truncatedTo(ChronoUnit.SECONDS)
@@ -58,7 +57,7 @@ class CountdownTimerRepository(
         return countryDeviceTimeDataSource.getCurrentDeviceTime()
     }
 
-    private suspend fun getTimeUntilDeviceLock(): OffsetDateTime = withContext(dispatchers) {
+    private suspend fun getDeviceLockingTime(): OffsetDateTime = withContext(dispatchers) {
 
         return@withContext if (activeUsagePeriodLocalDataSource.getLockingInfo() != null) {
             println("local DB call")
@@ -93,6 +92,7 @@ class CountdownTimerRepository(
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun getFormattedDeviceTime(
         currentTime: OffsetDateTime,
         deviceLockingTime: OffsetDateTime
@@ -104,7 +104,7 @@ class CountdownTimerRepository(
             val hours = timeRemaining / 3600
             val minutes = (timeRemaining % 3600) / 60
             val seconds = timeRemaining % 60
-            String.format("%02d:%02d:%02d", hours, minutes, seconds)
+            String.format("%02d:%02d:%02d", hours, minutes, seconds) // Hh:Mm:Ss
 
         }
     }

@@ -19,7 +19,6 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -36,8 +35,10 @@ class CountdownTimerRepositoryTest {
 
     @MockK
     private lateinit var countryIsoDataSource: CountryIsoDataSource
+
     @MockK
     private lateinit var deviceTimeDataSource: DeviceTimeDataSource
+
     @MockK
     private lateinit var deviceTimeFormatter: DateTimeFormatter
 
@@ -66,7 +67,7 @@ class CountdownTimerRepositoryTest {
             coEvery { activeUsagePeriodRemoteDataSource.getLockingInfo() } returns mockk(relaxed = true)
             every { deviceTimeDataSource.getCurrentDeviceTime() } returns mockk(relaxed = true)
             repository.getTimerState().first()
-            advanceUntilIdle()
+
             coVerify(exactly = 1) { activeUsagePeriodRemoteDataSource.getLockingInfo() }
             coVerify(exactly = 1) { activeUsagePeriodLocalDataSource.saveLockingInfo(any()) }
         }
@@ -77,7 +78,7 @@ class CountdownTimerRepositoryTest {
             coEvery { activeUsagePeriodLocalDataSource.getLockingInfo() } returns mockk(relaxed = true)
             justRun { activeUsagePeriodLocalDataSource.saveLockingInfo(any()) }
 
-             every { deviceTimeDataSource.getCurrentDeviceTime() } returns mockk(relaxed = true)
+            every { deviceTimeDataSource.getCurrentDeviceTime() } returns mockk(relaxed = true)
 
             repository.getTimerState().first()
 
@@ -96,7 +97,7 @@ class CountdownTimerRepositoryTest {
             val mockCurrentDeviceTime =
                 OffsetDateTime.of(2024, 3, 24, 21, 0, 0, 0, OffsetDateTime.now().offset)
 
-            every { deviceTimeDataSource.getCurrentDeviceTime()  } returns mockCurrentDeviceTime
+            every { deviceTimeDataSource.getCurrentDeviceTime() } returns mockCurrentDeviceTime
 
             val expectedResult = TimerScreenState(
                 timeRemaining = "02:59:59",
@@ -120,7 +121,7 @@ class CountdownTimerRepositoryTest {
             val mockCurrentDeviceTime =
                 OffsetDateTime.of(2024, 4, 24, 21, 59, 59, 0, OffsetDateTime.now().offset)
 
-             every { deviceTimeDataSource.getCurrentDeviceTime()  } returns mockCurrentDeviceTime
+            every { deviceTimeDataSource.getCurrentDeviceTime() } returns mockCurrentDeviceTime
 
             val expectedResult = TimerScreenState(
                 timeRemaining = "02:00:00",
@@ -147,7 +148,7 @@ class CountdownTimerRepositoryTest {
             val mockCurrentDeviceTime =
                 OffsetDateTime.of(2024, 4, 24, 21, 59, 59, 0, OffsetDateTime.now().offset)
 
-              every { deviceTimeDataSource.getCurrentDeviceTime()  } returns mockCurrentDeviceTime
+            every { deviceTimeDataSource.getCurrentDeviceTime() } returns mockCurrentDeviceTime
 
             val expectedResult = TimerScreenState(
                 timeRemaining = "02:00:00",
@@ -163,7 +164,6 @@ class CountdownTimerRepositoryTest {
             assertEquals(expectedResult, actualResult)
         }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `generate an locked status`() =
         runTest(testDispatcher) {
@@ -175,7 +175,7 @@ class CountdownTimerRepositoryTest {
             val mockCurrentDeviceTime =
                 OffsetDateTime.of(2024, 3, 24, 23, 59, 59, 0, OffsetDateTime.now().offset)
 
-             every { deviceTimeDataSource.getCurrentDeviceTime()  } returns mockCurrentDeviceTime
+            every { deviceTimeDataSource.getCurrentDeviceTime() } returns mockCurrentDeviceTime
 
             val expectedResult = TimerScreenState(
                 timeRemaining = "00:00:00 ",
@@ -187,7 +187,7 @@ class CountdownTimerRepositoryTest {
             coEvery { activeUsagePeriodLocalDataSource.getLockingInfo() } returns mockLockingInfo
 
             val actualResult = repository.getTimerState().first()
-            advanceUntilIdle()
+
             assertEquals(expectedResult, actualResult)
         }
 }

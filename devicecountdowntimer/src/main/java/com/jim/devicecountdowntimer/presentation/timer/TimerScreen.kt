@@ -2,14 +2,24 @@ package com.jim.devicecountdowntimer.presentation.timer
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,19 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.ui.platform.testTag
 import com.jim.devicecountdowntimer.presentation.composables.ErrorIndicator
 import com.jim.devicecountdowntimer.presentation.composables.LoadingIndicator
 import com.jim.devicecountdowntimer.ui.theme.cerapro
@@ -90,7 +90,8 @@ fun TimerScreen(state: TimerScreenState) {
                                 shape = RoundedCornerShape(500.dp)
                             )
                             .padding(16.dp)
-                            .size(260.dp).testTag("timer_card"),
+                            .size(260.dp)
+                            .testTag("timer_card"),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -169,7 +170,10 @@ fun TimerScreen(state: TimerScreenState) {
                 ErrorIndicator("An error occurred while fetching data. Please try again later")
             }
 
-            TimerRequestsStatus.Success -> {}
+            is TimerRequestsStatus.Success -> {
+
+            }
+
             null -> {}
         }
 

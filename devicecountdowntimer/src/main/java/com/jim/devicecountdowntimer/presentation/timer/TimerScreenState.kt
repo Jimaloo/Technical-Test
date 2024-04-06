@@ -2,7 +2,6 @@ package com.jim.devicecountdowntimer.presentation.timer
 
 data class TimerScreenState(
     val requestsStatus: TimerRequestsStatus? = null,
-
     val timeRemaining: String = "00:00:00",
     val timerStatus: TimerStatus? = null
 )
