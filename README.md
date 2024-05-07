@@ -1,8 +1,14 @@
-![alt text](/images/active_light.png "Active State - Light")
-![alt text](/images/warning_light.png "Warning State - Light")
-![alt text](/images/warning_dark.png "Warning State - Dark")
-![alt text](/images/locked_light.png "Locked State - Light")
-![alt text](/images/locked_dark.png "Locked State - Dark")
+<div style="display: flex; justify-content: space-between;">
+  <img src="/images/active_light.png" alt="Active State - Light" width="200" height="auto">
+  <img src="/images/warning_light.png" alt="Warning State - Light" width="200" height="auto">
+  
+  <img src="/images/locked_light.png" alt="Locked State - Light" width="200" height="auto">
+</div>
+<div style="display: flex; justify-content: space-between;">
+  
+  <img src="/images/warning_dark.png" alt="Warning State - Dark" width="200" height="auto">
+  <img src="/images/locked_dark.png" alt="Locked State - Dark" width="200" height="auto">
+</div>
 
 # M-kopa
 To include the devicecountdowntimer module to your module. Add the following line to your app's
